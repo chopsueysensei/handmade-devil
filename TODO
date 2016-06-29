@@ -1,13 +1,28 @@
+:: 0n1riKa ::   TODOs & Ideas:
 
-TODOs & Ideas:
+REMEMBER:
+
+- Data-oriented design!
+- Simple is better than complex
+- Explicit is better than implicit
+
+
+
+...
+
+
 
 ENGINE:
 
 - Hotloading of data AND code changes
 - Game state & input recording & recall
-
+- MIDI/input control for any component parameter (for video DJing)
 
 
 EDITOR:
 
+- Multimonitor
 - Shadertoy emu
+- Debug: Game objects are flagged in red in all scene views when they throw exceptions / spit out errors
+- Easy MIDI/input learn assignment
+
