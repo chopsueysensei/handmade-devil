@@ -9,14 +9,28 @@ namespace HandmadeDevil
     /// </summary>
     public class Game1 : Game
     {
+        static readonly bool FixedTimestep = false;
+
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D oneDownTex;
+        SpriteFont _monoFont;
+        uint _framesAccum;
+        double _lastFPSUpdateSeconds;
+        string _lastFPS;
+        Vector2 _debugPanelPos;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            if( !FixedTimestep )
+            {
+                IsFixedTimeStep = false;
+                graphics.SynchronizeWithVerticalRetrace = false;
+            }
         }
 
         /// <summary>
@@ -27,7 +41,10 @@ namespace HandmadeDevil
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            _framesAccum = 0;
+            _lastFPSUpdateSeconds = 0.0;
+            _lastFPS = "0";
+            _debugPanelPos = new Vector2( 10f, 10f );
 
             base.Initialize();
         }
@@ -43,6 +60,8 @@ namespace HandmadeDevil
 
             // TODO: use this.Content to load your game content here
             oneDownTex = this.Content.Load<Texture2D>("4084b4f9163f-xl");
+
+            _monoFont = Content.Load<SpriteFont>( "Inconsolata" );
         }
 
         /// <summary>
@@ -76,6 +95,16 @@ namespace HandmadeDevil
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            _framesAccum++;
+            var elapsed = gameTime.TotalGameTime.TotalSeconds - _lastFPSUpdateSeconds;
+
+            if( elapsed >= 1.0 )
+            {
+                _lastFPS = _framesAccum.ToString();
+                _lastFPSUpdateSeconds = gameTime.TotalGameTime.TotalSeconds - (elapsed-1.0);
+                _framesAccum = 0;
+            }
+
             GraphicsDevice.Clear( Color.CornflowerBlue );
 
             // TODO: Add your drawing code here
@@ -85,6 +114,7 @@ namespace HandmadeDevil
                 position: Vector2.Zero,
                 color: Color.Red
             );
+            spriteBatch.DrawString( _monoFont, _lastFPS, _debugPanelPos, Color.White );
             spriteBatch.End();
 
             base.Draw( gameTime );

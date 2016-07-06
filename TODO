@@ -2,8 +2,10 @@
 
 REMEMBER:
 
-- Data-oriented design!
+- Data-oriented design! (how to do this in C#? structs + static methods maybe?)
+  (think hard about using objects for _world_ objects, using composition and messaging and trying to eliminate inheritance)
 - Simple is better than complex
+- Beautiful is better than ugly
 - Explicit is better than implicit
 
 

@@ -25,3 +25,9 @@
 /processorParam:TextureFormat=Color
 /build:4084b4f9163f-xl.jpg
 
+#begin Inconsolata.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Inconsolata.spritefont
+
