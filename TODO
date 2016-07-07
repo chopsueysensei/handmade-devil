@@ -18,6 +18,7 @@ ENGINE:
 
 - Hotloading of data AND code changes
 - Game state & input recording & recall
+- Support window resizing with content stretching
 - MIDI/input control for any component parameter (for video DJing)
 
 

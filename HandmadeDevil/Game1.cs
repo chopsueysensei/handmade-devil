@@ -10,7 +10,7 @@ namespace HandmadeDevil
     /// </summary>
     public class Game1 : Game
     {
-        static readonly bool            FixedTimestep = false;
+        static readonly bool            FixedTimestep = true;
         static readonly Vector2         DebugPanelPos = new Vector2( 10f, 10f );
 
 
@@ -20,7 +20,7 @@ namespace HandmadeDevil
         ///
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D _frontBuffer;
+        Texture2D _backBuffer;
         SpriteFont _monoFont;
 
 
@@ -29,7 +29,9 @@ namespace HandmadeDevil
         ///
         uint _framesAccum;
         double _lastFPSUpdateSeconds;
-        UInt32[] _backBuffer;
+		int _xOffset, _yOffset;
+		// ???
+        UInt32[] _drawBuffer;
         
 
         ///
@@ -64,11 +66,14 @@ namespace HandmadeDevil
             _framesAccum = 0;
             _lastFPSUpdateSeconds = 0.0;
             _lastFPS = "0";
+			_xOffset = 0;
+			_yOffset = 0;
+
             _viewport = graphics.GraphicsDevice.Viewport;
 
             // TODO Resizing?
-            _backBuffer = new UInt32[ _viewport.Width*_viewport.Height ];
-            _frontBuffer = new Texture2D( graphics.GraphicsDevice, _viewport.Width, _viewport.Height );
+            _drawBuffer = new UInt32[ _viewport.Width*_viewport.Height ];
+			_backBuffer = new Texture2D( graphics.GraphicsDevice, _viewport.Width, _viewport.Height );
 
             base.Initialize();
         }
@@ -104,9 +109,7 @@ namespace HandmadeDevil
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            for( int i = 0; i < _viewport.Width*_viewport.Height; ++i )
-                _backBuffer[i] = 0xFF0000FF;
-
+			_xOffset++;
             base.Update(gameTime);
         }
 
@@ -126,11 +129,19 @@ namespace HandmadeDevil
                 _framesAccum = 0;
             }
 
+			int i = 0;
+			for( int y = 0; y < _viewport.Height; ++y )
+				for( int x = 0; x < _viewport.Width; ++x )
+					_drawBuffer[i++] = (UInt32)(
+						(0xFF<<24)
+						| (((byte) (x+_xOffset))<<16) | (((byte) (y+_yOffset))<<8) );
+
             // Suuuuuper slow
-            _frontBuffer.SetData<UInt32>( _backBuffer );
+			// TODO Try drawing pixel-sized colored textures directly?
+			_backBuffer.SetData<UInt32>( _drawBuffer );
 
             spriteBatch.Begin();
-            spriteBatch.Draw( _frontBuffer, position: Vector2.Zero );
+			spriteBatch.Draw( _backBuffer, position: Vector2.Zero );
             spriteBatch.DrawString( _monoFont, _lastFPS, DebugPanelPos, Color.White );
             spriteBatch.End();
 
