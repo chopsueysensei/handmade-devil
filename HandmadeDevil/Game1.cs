@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,17 +10,36 @@ namespace HandmadeDevil
     /// </summary>
     public class Game1 : Game
     {
-        static readonly bool FixedTimestep = false;
+        static readonly bool            FixedTimestep = false;
+        static readonly Vector2         DebugPanelPos = new Vector2( 10f, 10f );
 
 
+
+        ///
+        /// RESOURCES
+        ///
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D oneDownTex;
+        Texture2D _frontBuffer;
         SpriteFont _monoFont;
+
+
+        ///
+        /// GAME STATE
+        ///
         uint _framesAccum;
         double _lastFPSUpdateSeconds;
+        UInt32[] _backBuffer;
+        
+
+        ///
+        /// AUX
+        ///
         string _lastFPS;
-        Vector2 _debugPanelPos;
+        Viewport _viewport;
+
+
+
 
         public Game1()
         {
@@ -44,7 +64,11 @@ namespace HandmadeDevil
             _framesAccum = 0;
             _lastFPSUpdateSeconds = 0.0;
             _lastFPS = "0";
-            _debugPanelPos = new Vector2( 10f, 10f );
+            _viewport = graphics.GraphicsDevice.Viewport;
+
+            // TODO Resizing?
+            _backBuffer = new UInt32[ _viewport.Width*_viewport.Height ];
+            _frontBuffer = new Texture2D( graphics.GraphicsDevice, _viewport.Width, _viewport.Height );
 
             base.Initialize();
         }
@@ -55,11 +79,7 @@ namespace HandmadeDevil
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-            oneDownTex = this.Content.Load<Texture2D>("4084b4f9163f-xl");
 
             _monoFont = Content.Load<SpriteFont>( "Inconsolata" );
         }
@@ -84,7 +104,8 @@ namespace HandmadeDevil
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            for( int i = 0; i < _viewport.Width*_viewport.Height; ++i )
+                _backBuffer[i] = 0xFF0000FF;
 
             base.Update(gameTime);
         }
@@ -105,16 +126,12 @@ namespace HandmadeDevil
                 _framesAccum = 0;
             }
 
-            GraphicsDevice.Clear( Color.CornflowerBlue );
+            // Suuuuuper slow
+            _frontBuffer.SetData<UInt32>( _backBuffer );
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(
-                oneDownTex,
-                position: Vector2.Zero,
-                color: Color.Red
-            );
-            spriteBatch.DrawString( _monoFont, _lastFPS, _debugPanelPos, Color.White );
+            spriteBatch.Draw( _frontBuffer, position: Vector2.Zero );
+            spriteBatch.DrawString( _monoFont, _lastFPS, DebugPanelPos, Color.White );
             spriteBatch.End();
 
             base.Draw( gameTime );
