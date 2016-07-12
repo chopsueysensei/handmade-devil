@@ -10,7 +10,7 @@ namespace HandmadeDevil
     /// </summary>
     public class Game1 : Game
     {
-        static readonly bool            FixedTimestep = true;
+        static readonly bool            FixedTimestep = false;
         static readonly Vector2         DebugPanelPos = new Vector2( 10f, 10f );
 
 
@@ -39,7 +39,12 @@ namespace HandmadeDevil
         ///
         string _lastFPS;
         Viewport _viewport;
-
+        // TODO Publish this in a static App struct
+        KeyboardState _keyboardState;
+        MouseState _mouseState;
+        // TODO Generalize for several players
+        GamePadCapabilities _gamePadCaps;
+        GamePadState _gamePadState;
 
 
 
@@ -106,7 +111,12 @@ namespace HandmadeDevil
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            _keyboardState = Keyboard.GetState();
+            _mouseState = Mouse.GetState();
+            _gamePadCaps = GamePad.GetCapabilities( PlayerIndex.One );
+            _gamePadState = GamePad.GetState( PlayerIndex.One );
+
+            if (_gamePadState.Buttons.Back == ButtonState.Pressed || _keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
 			_xOffset++;
