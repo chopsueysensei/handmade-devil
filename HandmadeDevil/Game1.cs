@@ -10,8 +10,27 @@ namespace HandmadeDevil
     /// </summary>
     public class Game1 : Game
     {
+		///
+		/// PLATFORM CONFIG
+		///
+		// TODO move this to a file)
         static readonly bool            FixedTimestep = false;
         static readonly Vector2         DebugPanelPos = new Vector2( 10f, 10f );
+		static readonly int				SampleRate = 48000;
+		static readonly int				LatencySamples = 1024;
+		static readonly int				BytesPerSample = 2 * 2;		// 16 bit stereo
+		static readonly int				AudioBufferLenBytes = LatencySamples * BytesPerSample;
+
+
+		///
+		/// GAME STATE
+		///
+		uint _framesAccum;
+		double _lastFPSUpdateSeconds;
+		int _xOffset, _yOffset;
+		// ???
+		UInt32[] _drawBuffer;
+		byte[] _audioBuffer;
 
 
 
@@ -22,16 +41,7 @@ namespace HandmadeDevil
         SpriteBatch spriteBatch;
         Texture2D _backBuffer;
         SpriteFont _monoFont;
-
-
-        ///
-        /// GAME STATE
-        ///
-        uint _framesAccum;
-        double _lastFPSUpdateSeconds;
-		int _xOffset, _yOffset;
-		// ???
-        UInt32[] _drawBuffer;
+		DynamicSoundEffectInstance _audioInstance;
         
 
         ///
@@ -39,12 +49,13 @@ namespace HandmadeDevil
         ///
         string _lastFPS;
         Viewport _viewport;
-        // TODO Publish this in a static App struct
+        // TODO Publish this in a static App struct?
         KeyboardState _keyboardState;
         MouseState _mouseState;
         // TODO Generalize for several players
         GamePadCapabilities _gamePadCaps;
         GamePadState _gamePadState;
+		double _time;
 
 
 
@@ -52,6 +63,7 @@ namespace HandmadeDevil
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+			_time = 0.0;
 
             if( !FixedTimestep )
             {
@@ -79,6 +91,11 @@ namespace HandmadeDevil
             // TODO Resizing?
             _drawBuffer = new UInt32[ _viewport.Width*_viewport.Height ];
 			_backBuffer = new Texture2D( graphics.GraphicsDevice, _viewport.Width, _viewport.Height );
+
+			_audioBuffer = new byte[AudioBufferLenBytes];
+			_audioInstance = new DynamicSoundEffectInstance( SampleRate,  Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
+
+			_audioInstance.Play();
 
             base.Initialize();
         }
@@ -120,6 +137,11 @@ namespace HandmadeDevil
                 Exit();
 
 			_xOffset++;
+
+			// FIXME Review that custom class... ¬¬
+			while( _audioInstance.NeedsBuffer )
+				RenderAudioBuffer();
+
             base.Update(gameTime);
         }
 
@@ -157,5 +179,53 @@ namespace HandmadeDevil
 
             base.Draw( gameTime );
         }
+
+		private void RenderAudioBuffer()
+		{
+			const int Freq = 440;
+
+			for( int i = 0; i < AudioBufferLenBytes; i += BytesPerSample )
+			{
+				double sample = Math.Sin( 2 * Math.PI * Freq * _time );
+				// Left channel
+				Int16 lSample = Sample( sample );
+				ToByteArray( lSample, _audioBuffer, i );
+
+				// Right channel
+				Int16 rSample = Sample( sample );
+				ToByteArray( rSample, _audioBuffer, i+2 );
+
+				_time += 1.0 / SampleRate;
+			}
+
+			_audioInstance.SubmitBuffer( _audioBuffer );
+		}
+
+		private Int16 Sample( double sample )
+		{
+			Int16 result = 0;
+
+			sample = (sample > 1.0) ? 1.0 : (sample < -1.0 ? -1.0 : sample);
+			if( sample > .0 )
+				result = (Int16)( sample * Int16.MaxValue );
+			else
+				result = (Int16)( -sample * Int16.MinValue );
+
+			return result;
+		}
+
+		private void ToByteArray( Int16 sample, byte[] buffer, int index )
+		{
+			if( BitConverter.IsLittleEndian )
+			{
+				buffer[index] = (byte)sample;
+				buffer[index+1] = (byte)(sample >> 8);
+			}
+			else
+			{
+				buffer[index] = (byte)(sample >> 8);
+				buffer[index+1] = (byte)sample;
+			}
+		}
     }
 }
