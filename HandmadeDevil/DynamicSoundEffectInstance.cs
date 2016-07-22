@@ -147,6 +147,11 @@ public sealed class DynamicSoundEffectInstance : IDisposable
 		{
 			bufferIds = AL.GenBuffers(BUFFERCOUNT);
 			sourceId = AL.GenSource();
+
+            ALError error = AL.GetError();
+            if( error != ALError.NoError )
+                throw new Exception( AL.GetErrorString( error ) );
+
 			hasSourceId = true;
 		}
 		soundState = SoundState.Playing;
@@ -284,6 +289,9 @@ public sealed class DynamicSoundEffectInstance : IDisposable
 
 			int buffersProcessed;
 			AL.GetSource(sourceId, ALGetSourcei.BuffersProcessed, out buffersProcessed);
+            ALError error = AL.GetError();
+            if( error != ALError.NoError )
+                throw new Exception( AL.GetErrorString( error ) );
 
 			if (buffersProcessed == 0)
 				continue;

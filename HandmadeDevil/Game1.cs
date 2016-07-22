@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using OpenTK.Audio;
 
 namespace HandmadeDevil
 {
@@ -41,6 +42,7 @@ namespace HandmadeDevil
         SpriteBatch spriteBatch;
         Texture2D _backBuffer;
         SpriteFont _monoFont;
+        AudioContext _audioContext;
 		DynamicSoundEffectInstance _audioInstance;
         
 
@@ -92,12 +94,19 @@ namespace HandmadeDevil
             _drawBuffer = new UInt32[ _viewport.Width*_viewport.Height ];
 			_backBuffer = new Texture2D( graphics.GraphicsDevice, _viewport.Width, _viewport.Height );
 
+            _audioContext = new AudioContext();
 			_audioBuffer = new byte[AudioBufferLenBytes];
 			_audioInstance = new DynamicSoundEffectInstance( SampleRate,  Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
+            _audioInstance.BufferNeeded += OnAudioBufferNeeded;
 
 			_audioInstance.Play();
 
             base.Initialize();
+        }
+
+        void OnAudioBufferNeeded( object sender, EventArgs e )
+        {
+            RenderAudioBuffer();
         }
 
         /// <summary>
@@ -119,6 +128,9 @@ namespace HandmadeDevil
         {
             // TODO: Unload any non ContentManager content here
             this.Content.Unload();
+
+            _audioInstance.Dispose();
+            _audioContext.Dispose();
         }
 
         /// <summary>
@@ -139,8 +151,8 @@ namespace HandmadeDevil
 			_xOffset++;
 
 			// FIXME Review that custom class... ¬¬
-			while( _audioInstance.NeedsBuffer )
-				RenderAudioBuffer();
+            //while( _audioInstance.PendingBufferCount < 2 )
+            //    RenderAudioBuffer();
 
             base.Update(gameTime);
         }
@@ -183,7 +195,10 @@ namespace HandmadeDevil
 		private void RenderAudioBuffer()
 		{
 			const int Freq = 440;
+            const int Period = 10000;
+            const short Amp = 15000;
 
+            /*
 			for( int i = 0; i < AudioBufferLenBytes; i += BytesPerSample )
 			{
 				double sample = Math.Sin( 2 * Math.PI * Freq * _time );
@@ -197,6 +212,23 @@ namespace HandmadeDevil
 
 				_time += 1.0 / SampleRate;
 			}
+             * */
+
+            bool up = true;
+            int p = 0;
+
+            for( int i = 0; i < AudioBufferLenBytes; i += BytesPerSample )
+            {
+                ToByteArray( (short)(up ? Amp : -Amp), _audioBuffer, i );
+                ToByteArray( (short)(up ? Amp : -Amp), _audioBuffer, i+2 );
+
+                p++;
+                if( p == Period )
+                {
+                    up = !up;
+                    p = 0;
+                }
+            }
 
 			_audioInstance.SubmitBuffer( _audioBuffer );
 		}

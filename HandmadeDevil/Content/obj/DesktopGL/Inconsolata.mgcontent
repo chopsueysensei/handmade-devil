@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>/home/keny/dev/workshop/HandmadeDevil/HandmadeDevil/Content/Inconsolata.spritefont</SourceFile>
-  <SourceTime>2016-07-07T22:07:43+02:00</SourceTime>
-  <DestFile>/home/keny/dev/workshop/HandmadeDevil/HandmadeDevil/Content/bin/DesktopGL/Inconsolata.xnb</DestFile>
-  <DestTime>2016-07-18T22:11:53+02:00</DestTime>
+  <SourceFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/Inconsolata.spritefont</SourceFile>
+  <SourceTime>2016-07-06T15:10:04.1213604+02:00</SourceTime>
+  <DestFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/bin/DesktopGL/Inconsolata.xnb</DestFile>
+  <DestTime>2016-07-22T11:36:37.0295277+02:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
-  <ImporterTime>2016-06-30T01:29:36+02:00</ImporterTime>
+  <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
-  <ProcessorTime>2016-06-30T01:29:36+02:00</ProcessorTime>
+  <ProcessorTime>2016-03-30T08:36:08+02:00</ProcessorTime>
   <Parameters>
     <Key>TextureFormat</Key>
     <Value>Compressed</Value>
