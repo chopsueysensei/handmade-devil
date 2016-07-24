@@ -17,7 +17,7 @@ using OpenTK.Audio.OpenAL;
  */
 public sealed class DynamicSoundEffectInstance : IDisposable
 {
-	private const int BUFFERCOUNT = 2;
+	public const int BUFFERCOUNT = 2;
 
 	private SoundState soundState = SoundState.Stopped;
 	private AudioChannels channels;
