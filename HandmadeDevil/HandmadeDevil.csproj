@@ -41,10 +41,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DynamicSoundEffectInstance.cs" />
+    <Compile Include="Platform.cs" />
+    <Compile Include="PlatformDefs.cs" />
+    <Compile Include="PlatformAssemblyLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -77,4 +79,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\Onirika\Onirika.csproj">
+      <Project>{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}</Project>
+      <Name>Onirika</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

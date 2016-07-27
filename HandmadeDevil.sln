@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandmadeDevil", "HandmadeDevil\HandmadeDevil.csproj", "{B70FA952-ECAE-4E49-A924-479E374AFD0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandmadeDevil.Core", "HandmadeDevil.Core\HandmadeDevil.Core.csproj", "{E8DA25C3-ADBE-4D27-B7A7-4049BADC1236}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onirika", "Onirika\Onirika.csproj", "{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{B70FA952-ECAE-4E49-A924-479E374AFD0E}.Debug|x86.Build.0 = Debug|x86
 		{B70FA952-ECAE-4E49-A924-479E374AFD0E}.Release|x86.ActiveCfg = Release|x86
 		{B70FA952-ECAE-4E49-A924-479E374AFD0E}.Release|x86.Build.0 = Release|x86
+		{E8DA25C3-ADBE-4D27-B7A7-4049BADC1236}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8DA25C3-ADBE-4D27-B7A7-4049BADC1236}.Debug|x86.Build.0 = Debug|Any CPU
+		{E8DA25C3-ADBE-4D27-B7A7-4049BADC1236}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8DA25C3-ADBE-4D27-B7A7-4049BADC1236}.Release|x86.Build.0 = Release|Any CPU
+		{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}.Debug|x86.Build.0 = Debug|Any CPU
+		{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}.Release|x86.ActiveCfg = Release|Any CPU
+		{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
