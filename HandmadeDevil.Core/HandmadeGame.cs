@@ -24,7 +24,7 @@ namespace HandmadeDevil.Core
 		public override void Update()
 		{
 			_gs.xOffset++;
-			_gs.yOffset++;
+            _gs.yOffset++;
 		}
 
 		public override void RenderVideo( UInt32[] videoBuffer, int width, int height )

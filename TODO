@@ -2,12 +2,13 @@
 
 REMEMBER:
 
-- Data-oriented design! (how to do this in C#? structs + static methods maybe?)
+- Data-oriented design! http://www.dataorienteddesign.com/dodmain/ (how to do this in C#? structs + static methods maybe?)
   (think hard about using objects for _world_ objects, using composition and messaging and trying to eliminate inheritance)
 - Simple is better than complex
 - Beautiful is better than ugly
 - Explicit is better than implicit
 - http://gameprogrammingpatterns.com. Try to adapt the good ideas to a data-oriented design
+- Maximize fluidity when coding structures & algorithms.
 
 
 

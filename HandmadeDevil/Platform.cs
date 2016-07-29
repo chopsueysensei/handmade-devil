@@ -17,12 +17,9 @@ namespace HandmadeDevil
 		static readonly bool FixedTimestep = false;
 
 
-#if DEBUG
+		// TODO Do this the other way around! (copy Core DLL to Platform output dir on each build)
 		static readonly string SolutionBaseDir = "dev/workshop/HandmadeDevil";
 		static readonly string CoreDLLRelDir = "HandmadeDevil.Core/bin/Debug";
-#else
-		// TODO Do this the other way around! (copy Core DLL to Platform output dir on each build)
-#endif
 
 
 
@@ -35,7 +32,9 @@ namespace HandmadeDevil
 		///
 		/// PLATFORM STATE
 		///
-		string _gameDLLPath;
+        string _gameAsmName;
+		string _gameDLLSrcPath;
+        //string _gameDLLDestPath;
 		DateTime _gameDLLWriteTime;
 		GameModule _gameInstance;
 
@@ -104,23 +103,29 @@ namespace HandmadeDevil
 			_audioInstance = new DynamicSoundEffectInstance( 48000,  Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
 			_audioInstance.Play();
 
+            //var homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            //var assemblyPath = Path.Combine( Path.Combine( homePath, SolutionBaseDir ), CoreDLLRelDir );
+            var assemblyPath = AppDomain.CurrentDomain.BaseDirectory;
+
+			Console.WriteLine( "Loading game assembly from " + assemblyPath );
+            _gameAsmName = "HandmadeDevil.Core";
+            _gameDLLSrcPath = Path.Combine( assemblyPath, _gameAsmName + ".dll" );
+
 #if DEBUG
 			// Provide an assembly loader for this platform
-			ModuleManager.AssemblyLoader = new PlatformAssemblyLoader();
+			ModuleManager.AssemblyLoader = new PlatformAssemblyLoader( assemblyPath );
+            //_gameDLLDestPath = "HandmadeDevil.Core.Temp.dll";
+            //File.Copy( _gameDLLSrcPath, _gameDLLDestPath, true );
 
-			var homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-			var assemblyPath = Path.Combine( Path.Combine( homePath, SolutionBaseDir ), CoreDLLRelDir );
-			Console.WriteLine( "Loading game assembly from " + assemblyPath );
-			_gameDLLPath = Path.Combine( assemblyPath, "HandmadeDevil.Core.dll" );
-			_gameInstance = ModuleManager.LoadModule<GameModule>( _gameDLLPath );
+			_gameInstance = ModuleManager.LoadModule<GameModule>( _gameAsmName );
 
 			if( _gameInstance == null )
-				throw new Exception( "Could not load game assembly at '" + _gameDLLPath + "'!" );
+				throw new Exception( "Could not load game assembly at '" + _gameDLLSrcPath + "'!" );
 
-			_gameDLLWriteTime = new FileInfo( _gameDLLPath ).LastWriteTime;
+			_gameDLLWriteTime = new FileInfo( _gameDLLSrcPath ).LastWriteTime;
 #else
 			// Link 'statically' (no reloads allowed)
-			_gameInstance = ModuleManager.LinkModule<IGameModule>( "HandmadeDevil.Core" );
+            _gameInstance = ModuleManager.LinkModule<GameModule>( _gameDLLName );
 #endif
 
 			// Pass platform configuration to the game
@@ -158,20 +163,21 @@ namespace HandmadeDevil
         {
 			base.Update(gameTime);
 
-			// TODO Fetch game DLL and see if it's been updated
-			var newWriteTime = new FileInfo( _gameDLLPath ).LastWriteTime;
-//			if( newWriteTime != _gameDLLWriteTime )
-//			{
-//				AppDomain.Unload( _gameDomain );
-//
-////				_gameDomain = AppDomain.CreateDomain( "HandmadeGame", null, _domainSetup );
-////				var gameAsm = _gameDomain.Load( File.ReadAllBytes( _gameDLLPath ) );
-//////				_gameType = gameAsm.GetType( "HandmadeDevil.Core.HandmadeGame" );
-////				var inst = gameAsm.CreateInstance( "HandmadeDevil.Core.HandmadeGame" ) as HandmadeGame;
-////				var word = inst.Talk();
-//
-//				_gameDLLWriteTime = newWriteTime;
-//			}
+#if DEBUG
+			// Fetch game DLL and see if it's been updated
+			var newWriteTime = new FileInfo( _gameDLLSrcPath ).LastWriteTime;
+			if( newWriteTime != _gameDLLWriteTime )
+			{
+                ModuleManager.UnloadModule<GameModule>();
+                //File.Copy( _gameDLLSrcPath, _gameDLLDestPath, true );
+			    _gameInstance = ModuleManager.LoadModule<GameModule>( _gameAsmName );
+
+			    if( _gameInstance == null )
+				    throw new Exception( "Could not load game assembly at '" + _gameDLLSrcPath + "'!" );
+
+				_gameDLLWriteTime = newWriteTime;
+			}
+#endif
 
 			var input = _gameInstance.gameInput;
 			input.keyboardState	= Keyboard.GetState();

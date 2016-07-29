@@ -7,14 +7,14 @@ namespace HandmadeDevil
 {
 	public struct PlatformConfig : GameModule.IPlatformConfig
 	{
-		public Vector2		DebugPanelPos			{ get; }
-		public int			SampleRate				{ get; }
-		public int			LatencySamples			{ get; }
-		public int			BytesPerSample			{ get; }
-		public int			AudioBufferLenBytes		{ get; }
+		public Vector2		DebugPanelPos			{ get; private set; }
+		public int			SampleRate				{ get; private set; }
+		public int			LatencySamples			{ get; private set; }
+		public int			BytesPerSample			{ get; private set; }
+		public int			AudioBufferLenBytes		{ get; private set; }
 
 
-		public PlatformConfig( string configFilePath )
+		public PlatformConfig( string configFilePath ) : this()
 		{
 			// TODO read this from a file
 			DebugPanelPos			= new Vector2( 10f, 10f );

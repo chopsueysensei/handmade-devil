@@ -7,7 +7,7 @@ namespace HandmadeDevil
 {
 	public class PlatformAppDomain : IAppDomain
 	{
-		internal AppDomain appDomain { get; }
+		internal AppDomain appDomain { get; private set; }
 
 		public PlatformAppDomain( AppDomain appDomain )
 		{
@@ -16,7 +16,7 @@ namespace HandmadeDevil
 
 		public Assembly LoadAssembly( string assemblyPath )
 		{
-			return appDomain.Load( File.ReadAllBytes( assemblyPath ) );
+			return appDomain.Load( assemblyPath );
 		}
 	}
 
@@ -24,11 +24,13 @@ namespace HandmadeDevil
 	{
 		private AppDomainSetup _domainSetup;
 
-		public PlatformAssemblyLoader()
+		public PlatformAssemblyLoader( string basePath )
 		{
 			_domainSetup = new AppDomainSetup();
 			// Enable Shadow Copy to avoid file locking errors
+            _domainSetup.ApplicationBase = basePath;
 			_domainSetup.ShadowCopyFiles = "true";
+            _domainSetup.ShadowCopyDirectories = basePath;
 		}
 
 		public IAppDomain CreateAssemblyDomain( string friendlyName )

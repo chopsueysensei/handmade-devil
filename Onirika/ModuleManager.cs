@@ -30,6 +30,9 @@ namespace Onirika.Utils
 		public static T LoadModule<T>( string assemblyPath ) where T : class
 		{
 			IAppDomain asmDomain = AssemblyLoader.CreateAssemblyDomain( assemblyPath );
+            // FIXME This does not work because it loads the assembly on the current executing domain (!!)
+            // Should do CreateInstanceAndUnwrap (see example in https://msdn.microsoft.com/en-us/library/system.appdomain.aspx)
+            // but this does not work for types inside a PCL (can't be serializable!) so I'm fucked!
 			Assembly asm = asmDomain.LoadAssembly( assemblyPath );
 
 			var types = GetLoadableTypes( asm );
