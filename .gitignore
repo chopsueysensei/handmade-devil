@@ -1,8 +1,6 @@
 *.suo
 *.userprefs
-HandmadeDevil/bin/
-HandmadeDevil/obj/
-HandmadeDevil.Core/bin/
-HandmadeDevil.Core/obj/
+HandmadeDevil*/bin/
+HandmadeDevil*/obj/
 Onirika/bin/
 Onirika/obj/
