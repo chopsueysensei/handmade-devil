@@ -1,11 +1,11 @@
-﻿using System;
-using Onirika.Utils;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 
-
+/*
 namespace HandmadeDevil.Core
 {
-	public class HandmadeGame : GameModule
+	public class HandmadeGame
 	{
 		private GameState _gs { get { return gameState as GameState; } }
 
@@ -21,7 +21,7 @@ namespace HandmadeDevil.Core
 			};
 		}
 
-		public override void Update()
+		public override void Update( GameTime gameTime )
 		{
 			_gs.xOffset++;
             _gs.yOffset++;
@@ -94,3 +94,4 @@ namespace HandmadeDevil.Core
 	}
 }
 
+*/

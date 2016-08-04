@@ -4,7 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/4084b4f9163f-xl.jpg</File>
-    <File>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/Inconsolata.spritefont</File>
+    <File>C:/dev/workshop/HandmadeDevil/HandmadeDevil.DesktopGL/Content/4084b4f9163f-xl.jpg</File>
+    <File>C:/dev/workshop/HandmadeDevil/HandmadeDevil.DesktopGL/Content/Inconsolata.spritefont</File>
   </SourceFiles>
 </SourceFileCollection>

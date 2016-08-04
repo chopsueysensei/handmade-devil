@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/4084b4f9163f-xl.jpg</SourceFile>
+  <SourceFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil.DesktopGL/Content/4084b4f9163f-xl.jpg</SourceFile>
   <SourceTime>2016-03-28T12:24:35.9861176+02:00</SourceTime>
-  <DestFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/bin/DesktopGL/4084b4f9163f-xl.xnb</DestFile>
-  <DestTime>2016-07-28T17:54:53.4958185+02:00</DestTime>
+  <DestFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil.DesktopGL/Content/bin/DesktopGL/4084b4f9163f-xl.xnb</DestFile>
+  <DestTime>2016-08-02T18:39:15.8236683+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

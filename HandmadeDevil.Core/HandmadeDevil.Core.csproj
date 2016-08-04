@@ -45,12 +45,6 @@
     <Compile Include="HandmadeGame.cs" />
     <Compile Include="GameDefs.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Onirika\Onirika.csproj">
-      <Project>{EFF38575-7C22-4E3A-B8C7-043B60F5F6C8}</Project>
-      <Name>Onirika</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)\HandmadeDevil\bin\DesktopGL\x86\$(ConfigurationName)\" /Y
 xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)\HandmadeDevil\bin\DesktopGL\x86\$(ConfigurationName)\" /Y

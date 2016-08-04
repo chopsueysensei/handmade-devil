@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/Inconsolata.spritefont</SourceFile>
+  <SourceFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil.DesktopGL/Content/Inconsolata.spritefont</SourceFile>
   <SourceTime>2016-07-06T15:10:04.1213604+02:00</SourceTime>
-  <DestFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil/Content/bin/DesktopGL/Inconsolata.xnb</DestFile>
-  <DestTime>2016-07-28T17:54:53.7378185+02:00</DestTime>
+  <DestFile>C:/dev/workshop/HandmadeDevil/HandmadeDevil.DesktopGL/Content/bin/DesktopGL/Inconsolata.xnb</DestFile>
+  <DestTime>2016-08-02T18:39:16.0726683+02:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
