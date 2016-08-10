@@ -12,7 +12,7 @@ namespace HandmadeDevil.DesktopGL
             this.game = game;
         }
 
-        public GameModule.IGameState RetrieveGameStateAndExit()
+        public IGameState RetrieveGameStateAndExit()
         {
             var state = game.gameState;
             game.Exit();
@@ -35,7 +35,9 @@ namespace HandmadeDevil.DesktopGL
         static void Main()
         {
             var game = new HandmadeGame();
-            // TODO Disable for final build?
+
+            // Create a wrapper around the game instance and make it available from current AppDomain
+            // TODO Disable for final build
             var wrapper = new GameWrapper(game);
             AppDomain.CurrentDomain.SetData( "GameWrapper", wrapper );
 

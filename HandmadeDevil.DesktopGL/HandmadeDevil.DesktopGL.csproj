@@ -38,9 +38,6 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="HandmadeGame.cs" />
-    <Compile Include="PlatformAssemblyLoader.cs" />
-    <Compile Include="PlatformConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

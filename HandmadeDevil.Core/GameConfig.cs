@@ -5,7 +5,7 @@ using System;
 
 namespace HandmadeDevil.DesktopGL
 {
-    public struct PlatformConfig : GameModule.IPlatformConfig
+    public struct GameConfig
     {
         public Vector2 DebugPanelPos { get; private set; }
         public int SampleRate { get; private set; }
@@ -14,7 +14,7 @@ namespace HandmadeDevil.DesktopGL
         public int AudioBufferLenBytes { get; private set; }
 
 
-        public PlatformConfig( string configFilePath )
+        public GameConfig( string configFilePath )
             : this()
         {
             // TODO read this from a file
