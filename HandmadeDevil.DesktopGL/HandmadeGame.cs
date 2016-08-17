@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using OpenTK.Audio;
 using System;
 
 namespace HandmadeDevil.DesktopGL
@@ -27,6 +28,8 @@ namespace HandmadeDevil.DesktopGL
         SpriteBatch _spriteBatch;
         Texture2D _backBuffer;
         SpriteFont _monoFont;
+        AudioContext _audioContext;
+        DynamicSoundEffectInstance _audioInstance;
 
 
         ///
@@ -38,6 +41,7 @@ namespace HandmadeDevil.DesktopGL
         // ???
         Viewport _viewport;
         UInt32[] _drawBuffer;
+        byte[] _audioBuffer;
 
 
 
@@ -78,6 +82,13 @@ namespace HandmadeDevil.DesktopGL
             // TODO Resizing!
             _drawBuffer = new UInt32[_viewport.Width * _viewport.Height];
             _backBuffer = new Texture2D( _graphics.GraphicsDevice, _viewport.Width, _viewport.Height );
+
+            // Init audio
+            _audioContext = new AudioContext();
+            _audioBuffer = new byte[_cfg.AudioBufferLenBytes];
+            _audioInstance = new DynamicSoundEffectInstance( _cfg.SampleRate, Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
+            _audioInstance = new DynamicSoundEffectInstance( 48000, Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
+            _audioInstance.Play();
         }
 
         /// <summary>
@@ -95,7 +106,10 @@ namespace HandmadeDevil.DesktopGL
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            this.Content.Unload();
+
+            _audioInstance.Dispose();
+            _audioContext.Dispose();
         }
 
         /// <summary>
@@ -109,6 +123,14 @@ namespace HandmadeDevil.DesktopGL
 
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
+
+            HandmadeCore.Update( gameState as GameState, gameTime );
+
+            while( _audioInstance.PendingBufferCount < DynamicSoundEffectInstance.BUFFERCOUNT )
+            {
+                HandmadeCore.RenderAudio( gameState as GameState, _cfg, _audioBuffer );
+                _audioInstance.SubmitBuffer( _audioBuffer );
+            }
         }
 
         /// <summary>
@@ -130,7 +152,7 @@ namespace HandmadeDevil.DesktopGL
                 _framesAccum = 0;
             }
 
-//            _gameInstance.RenderVideo( _drawBuffer, _viewport.Width, _viewport.Height );
+            HandmadeCore.RenderVideo( gameState as GameState, _drawBuffer, _viewport.Width, _viewport.Height );
 
             // Suuuuuper slow
             // TODO Try drawing pixel-sized colored textures directly?

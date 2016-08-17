@@ -1,9 +1,8 @@
-﻿using HandmadeDevil.Core;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 
 
-namespace HandmadeDevil.DesktopGL
+namespace HandmadeDevil.Core
 {
     public struct GameConfig
     {

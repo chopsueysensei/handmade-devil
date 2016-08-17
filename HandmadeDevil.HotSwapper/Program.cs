@@ -26,7 +26,6 @@ namespace HandmadeDevil.HotSwapper
         static DateTime _gameAsmWriteTime;
         static bool _reloadAssembly;
         static AppDomain _gameDomain;
-        static GameModule _gameInstance;
 
 
 

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandmadeDevil.DesktopGL", "HandmadeDevil.DesktopGL\HandmadeDevil.DesktopGL.csproj", "{36009799-7C78-4E16-81D9-0C3701FAE695}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandmadeDevil.HotSwapper", "HandmadeDevil.HotSwapper\HandmadeDevil.HotSwapper.csproj", "{29AB5994-0A6F-4033-8AD0-6B175D6AFFA6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{36009799-7C78-4E16-81D9-0C3701FAE695} = {36009799-7C78-4E16-81D9-0C3701FAE695}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandmadeDevil.Core", "HandmadeDevil.Core\HandmadeDevil.Core.csproj", "{E8DA25C3-ADBE-4D27-B7A7-4049BADC1236}"
 EndProject

@@ -44,12 +44,10 @@
   <ItemGroup>
     <Compile Include="HandmadeCore.cs" />
     <Compile Include="GameDefs.cs" />
-    <Compile Include="HandmadeGame.cs" />
     <Compile Include="GameConfig.cs" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)\HandmadeDevil\bin\DesktopGL\x86\$(ConfigurationName)\" /Y
-xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)\HandmadeDevil\bin\DesktopGL\x86\$(ConfigurationName)\" /Y
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

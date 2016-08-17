@@ -48,8 +48,7 @@ namespace HandmadeDevil.Core
 
     public abstract class GameModule : Game
     {
-        // Initialized by the game, can be overwriten by the platform on game reload
-        public IGameState gameState;
+        public IGameState gameState { get; private set; }
 
         public GameModule( IGameState initialState )
         {

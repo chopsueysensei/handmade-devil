@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 
 
 
@@ -7,14 +8,13 @@ namespace HandmadeDevil.Core
 {
 	public static class HandmadeCore
 	{
-/*
-		public override void Update( GameTime gameTime )
+		public static void Update( GameState gs, GameTime gt )
 		{
-			_gs.xOffset++;
-            _gs.yOffset++;
+			gs.xOffset++;
+            gs.yOffset++;
 		}
 
-		public override void RenderVideo( UInt32[] videoBuffer, int width, int height )
+		public static void RenderVideo( GameState gs, UInt32[] videoBuffer, int width, int height )
 		{
 			int i = 0;
 			for( int y = 0; y < height; ++y )
@@ -22,20 +22,20 @@ namespace HandmadeDevil.Core
 				{
 					videoBuffer[i++] = (UInt32)(
 						(0xFF<<24)
-						| (((byte) (x + _gs.xOffset))<<16)
-						| (((byte) (y + _gs.yOffset))<<8)
+						| (((byte) (x + gs.xOffset))<<16)
+						| (((byte) (y + gs.yOffset))<<8)
 					);			
 				}
 		}
 
-		public override void RenderAudio( byte[] audioBuffer )
+		public static void RenderAudio( GameState gs, GameConfig gc, byte[] audioBuffer )
 		{
-			const float Freq = 440f;
-			const float Amp = 15000;
+			const float Freq = 220f;
+			const float Amp = 0.5f;               // Range 0.0/1.0
 
-			for( int i = 0; i < platformConfig.AudioBufferLenBytes; i += platformConfig.BytesPerSample )
+			for( int i = 0; i < gc.AudioBufferLenBytes; i += gc.BytesPerSample )
 			{
-				double sample = Amp * Math.Sin( 2 * Math.PI * Freq * _gs.time );
+				double sample = Amp * Math.Sin( 2 * Math.PI * Freq * gs.time );
 				// Left channel
 				Int16 lSample = Sample( sample );
 				ToByteArray( lSample, audioBuffer, i );
@@ -44,12 +44,17 @@ namespace HandmadeDevil.Core
 				Int16 rSample = Sample( sample );
 				ToByteArray( rSample, audioBuffer, i+2 );
 
-				_gs.time += 1.0 / platformConfig.SampleRate;
+				gs.time += 1.0 / gc.SampleRate;
 			}
 		}
 
 		#region Aux functions
 
+        /// <summary>
+        /// Samples a continuous sound function to a discrete 16-bit PCM sample
+        /// </summary>
+        /// <param name="sample">Audio curve in the range -1.0/+1.0</param>
+        /// <returns></returns>
 		private static Int16 Sample( double sample )
 		{
 			Int16 result = 0;
@@ -78,6 +83,5 @@ namespace HandmadeDevil.Core
 		}
 
 		#endregion
- */
 	}
 }
