@@ -12,19 +12,35 @@ namespace HandmadeDevil.Core
 		{
 			gs.xOffset++;
             gs.yOffset++;
+
+            gs.luminance += (float)(gt.ElapsedGameTime.TotalSeconds * gs.luminanceSign);
+            if( gs.luminance >= 1f )
+            {
+                gs.luminance = 1f;
+                gs.luminanceSign *= -1f;
+            }
+            else if( gs.luminance <= 0f )
+            {
+                gs.luminance = 0f;
+                gs.luminanceSign *= -1f;
+            }
 		}
 
 		public static void RenderVideo( GameState gs, UInt32[] videoBuffer, int width, int height )
 		{
 			int i = 0;
+            int xoff = gs.xOffset;
+            int yoff = gs.yOffset;
+
 			for( int y = 0; y < height; ++y )
 				for( int x = 0; x < width; ++x )
 				{
-					videoBuffer[i++] = (UInt32)(
+					videoBuffer[i] = (UInt32)(
 						(0xFF<<24)
-						| (((byte) (x + gs.xOffset))<<16)
-						| (((byte) (y + gs.yOffset))<<8)
-					);			
+						| ( (byte)( ((byte)(x + xoff)) * gs.luminance ) <<16)
+						| ( (byte)( ((byte)(y + yoff)) * gs.luminance ) <<8)
+					);
+                    ++i;
 				}
 		}
 

@@ -45,7 +45,7 @@ namespace HandmadeDevil.DesktopGL
 
 
 
-        public HandmadeGame() : base(null)
+        public HandmadeGame( byte[] gameStateData = null ) : base( gameStateData )
         {
             _graphics = new GraphicsDeviceManager( this );
             // Relative to platform assembly!
@@ -119,16 +119,19 @@ namespace HandmadeDevil.DesktopGL
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update( GameTime gameTime )
         {
+            if( isPaused )
+                return;
+
             base.Update( gameTime );
 
             if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
 
-            HandmadeCore.Update( gameState as GameState, gameTime );
+            HandmadeCore.Update( gameState, gameTime );
 
             while( _audioInstance.PendingBufferCount < DynamicSoundEffectInstance.BUFFERCOUNT )
             {
-                HandmadeCore.RenderAudio( gameState as GameState, _cfg, _audioBuffer );
+                HandmadeCore.RenderAudio( gameState, _cfg, _audioBuffer );
                 _audioInstance.SubmitBuffer( _audioBuffer );
             }
         }
@@ -152,7 +155,7 @@ namespace HandmadeDevil.DesktopGL
                 _framesAccum = 0;
             }
 
-            HandmadeCore.RenderVideo( gameState as GameState, _drawBuffer, _viewport.Width, _viewport.Height );
+            HandmadeCore.RenderVideo( gameState, _drawBuffer, _viewport.Width, _viewport.Height );
 
             // Suuuuuper slow
             // TODO Try drawing pixel-sized colored textures directly?

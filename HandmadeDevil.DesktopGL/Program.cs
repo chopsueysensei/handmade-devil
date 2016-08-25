@@ -12,10 +12,10 @@ namespace HandmadeDevil.DesktopGL
             this.game = game;
         }
 
-        public IGameState RetrieveGameStateAndExit()
+        public byte[] RetrieveGameStateAndExit()
         {
-//            var state = game.gameState;
-            IGameState state = null;
+            game.isPaused = true;
+            var state = game.SerializeGameState();
             game.Exit();
 
             return state;
@@ -35,12 +35,17 @@ namespace HandmadeDevil.DesktopGL
         [STAThread]
         static void Main()
         {
-            var game = new HandmadeGame();
+            HandmadeGame game = null;
 
-#if !RELEASE
+#if DEBUG
+            byte[] stateData = AppDomain.CurrentDomain.GetData( DomainDefs.DataKey_GameState ) as byte[];
+            game = new HandmadeGame( stateData );
+
             // Create a wrapper around the game instance and make it available from current AppDomain
             var wrapper = new GameWrapper(game);
-            AppDomain.CurrentDomain.SetData( "GameWrapper", wrapper );
+            AppDomain.CurrentDomain.SetData( DomainDefs.DataKey_GameWrapper, wrapper );
+#else
+            game = new HandmadeGame();
 #endif
 
             using( game )

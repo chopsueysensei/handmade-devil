@@ -27,6 +27,8 @@ namespace HandmadeDevil.HotSwapper
         static bool _reloadAssembly;
         static AppDomain _gameDomain;
 
+        static byte[] gameStateBuffer = null;
+
 
 
         /// <summary>
@@ -57,9 +59,10 @@ namespace HandmadeDevil.HotSwapper
                 if( t.IsAlive )
                 {
                     // If assembly was updated, obtain last game state and make it terminate
+                    var wrapper = (_gameDomain.GetData( DomainDefs.DataKey_GameWrapper ) as IGameWrapper);
+                    gameStateBuffer = wrapper.RetrieveGameStateAndExit();
+
                     _reloadAssembly = true;
-                    var wrapper = (_gameDomain.GetData( "GameWrapper" ) as IGameWrapper);
-                    var gameState = wrapper.RetrieveGameStateAndExit();
                 }
             }
 
@@ -86,6 +89,8 @@ namespace HandmadeDevil.HotSwapper
         {
             _gameDomain = SetupAppDomain( _gamePrjOutDir, GamePrjName );
 
+            // Pass existing game state (if any)
+            _gameDomain.SetData( DomainDefs.DataKey_GameState, gameStateBuffer );
             // Block thread while executing game's assembly
             _gameDomain.ExecuteAssembly( _gameAsmPath );
 
