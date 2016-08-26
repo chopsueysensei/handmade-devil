@@ -15,7 +15,7 @@ namespace HandmadeDevil.DesktopGL
         public byte[] RetrieveGameStateAndExit()
         {
             game.isPaused = true;
-            var state = game.SerializeGameState();
+            var state = game.SerializeGameStateBinary();
             game.Exit();
 
             return state;

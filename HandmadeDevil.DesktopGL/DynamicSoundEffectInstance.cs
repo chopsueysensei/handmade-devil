@@ -17,7 +17,7 @@ using OpenTK.Audio.OpenAL;
  */
 public sealed class DynamicSoundEffectInstance : IDisposable
 {
-	public const int BUFFERCOUNT = 2;
+	public const int BufferCount = 2;
 
 	private SoundState soundState = SoundState.Stopped;
 	private AudioChannels channels;
@@ -145,7 +145,7 @@ public sealed class DynamicSoundEffectInstance : IDisposable
 	{
 		if (!hasSourceId)
 		{
-			bufferIds = AL.GenBuffers(BUFFERCOUNT);
+			bufferIds = AL.GenBuffers(BufferCount);
 			sourceId = AL.GenSource();
 
             ALError error = AL.GetError();

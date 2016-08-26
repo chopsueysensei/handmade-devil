@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenTK.Audio;
 using System;
+using System.IO;
 
 namespace HandmadeDevil.DesktopGL
 {
@@ -124,16 +125,47 @@ namespace HandmadeDevil.DesktopGL
 
             base.Update( gameTime );
 
-            if( GamePad.GetState( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown( Keys.Escape ) )
+            if( Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
+            if( Keyboard.GetState().IsKeyDown( Keys.RightControl ) )
+            {
+                 if( Keyboard.GetState().IsKeyDown( Keys.D1) )
+                     SaveGameStateToSlot( 1 );
+            }
+            if( Keyboard.GetState().IsKeyDown( Keys.RightShift ) )
+            {
+                if( Keyboard.GetState().IsKeyDown( Keys.D1 ) )
+                    ReadGameStateFromSlot( 1 );
+            }
 
             HandmadeCore.Update( gameState, gameTime );
 
-            while( _audioInstance.PendingBufferCount < DynamicSoundEffectInstance.BUFFERCOUNT )
+            while( _audioInstance.PendingBufferCount < DynamicSoundEffectInstance.BufferCount )
             {
                 HandmadeCore.RenderAudio( gameState, _cfg, _audioBuffer );
                 _audioInstance.SubmitBuffer( _audioBuffer );
             }
+        }
+
+        private void SaveGameStateToSlot( int slotIndex )
+        {
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+            var gameStateStr = SerializeGameStateXML();
+            File.WriteAllText( Path.Combine( dir, "game_state_" + slotIndex + ".xml" ), gameStateStr );
+        }
+
+        private void ReadGameStateFromSlot( int slotIndex )
+        {
+            string gameStateStr;
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+
+            try
+            {
+                gameStateStr = File.ReadAllText( Path.Combine( dir, "game_state_" + slotIndex + ".xml" ) );
+                gameState = DeserializeGameState( gameStateStr );
+            }
+            catch( FileNotFoundException )
+            {}
         }
 
         /// <summary>
