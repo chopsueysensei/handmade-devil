@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenTK.Audio;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace HandmadeDevil.DesktopGL
@@ -43,6 +44,7 @@ namespace HandmadeDevil.DesktopGL
         Viewport _viewport;
         UInt32[] _drawBuffer;
         byte[] _audioBuffer;
+        List<string> _logStrings;
 
 
 
@@ -90,6 +92,8 @@ namespace HandmadeDevil.DesktopGL
             _audioInstance = new DynamicSoundEffectInstance( _cfg.SampleRate, Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
             _audioInstance = new DynamicSoundEffectInstance( 48000, Microsoft.Xna.Framework.Audio.AudioChannels.Stereo );
             _audioInstance.Play();
+
+            _logStrings = new List<string>();
         }
 
         /// <summary>
@@ -125,6 +129,7 @@ namespace HandmadeDevil.DesktopGL
 
             base.Update( gameTime );
 
+            // TODO Do proper input handling (key down/up events)
             if( Keyboard.GetState().IsKeyDown( Keys.Escape ) )
                 Exit();
             if( Keyboard.GetState().IsKeyDown( Keys.RightControl ) )
@@ -151,21 +156,35 @@ namespace HandmadeDevil.DesktopGL
         {
             var dir = AppDomain.CurrentDomain.BaseDirectory;
             var gameStateStr = SerializeGameStateXML();
-            File.WriteAllText( Path.Combine( dir, "game_state_" + slotIndex + ".xml" ), gameStateStr );
+            var path = Path.Combine( dir, "game_state_" + slotIndex + ".xml" );
+            File.WriteAllText( path, gameStateStr );
+
+            DebugLog( "Dumped game state to " + path );
         }
 
         private void ReadGameStateFromSlot( int slotIndex )
         {
             string gameStateStr;
             var dir = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine( dir, "game_state_" + slotIndex + ".xml" );
 
             try
             {
-                gameStateStr = File.ReadAllText( Path.Combine( dir, "game_state_" + slotIndex + ".xml" ) );
+                gameStateStr = File.ReadAllText( path );
                 gameState = DeserializeGameState( gameStateStr );
+                DebugLog( "Loaded game state from " + path );
             }
             catch( FileNotFoundException )
-            {}
+            {
+                DebugLog( "ERR: No game state found in " + path );
+            }
+        }
+
+        // TODO Make this asynchronous and thread-safe
+        // TODO Make this a bit more powerful (different log categories, tags, etc.)
+        private void DebugLog( string msg )
+        {
+            _logStrings.Insert( 0, msg );
         }
 
         /// <summary>
@@ -175,7 +194,6 @@ namespace HandmadeDevil.DesktopGL
         protected override void Draw( GameTime gameTime )
         {
             base.Draw( gameTime );
-            GraphicsDevice.Clear( Color.CornflowerBlue );
 
             _framesAccum++;
             var elapsed = gameTime.TotalGameTime.TotalSeconds - _lastFPSUpdateSeconds;
@@ -193,9 +211,20 @@ namespace HandmadeDevil.DesktopGL
             // TODO Try drawing pixel-sized colored textures directly?
             _backBuffer.SetData<UInt32>( _drawBuffer );
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin( blendState:BlendState.NonPremultiplied );
             _spriteBatch.Draw( _backBuffer, position: Vector2.Zero );
             _spriteBatch.DrawString( _monoFont, _lastFPS, _cfg.DebugPanelPos, Color.White );
+            Vector2 consolePos = new Vector2( 0f, _viewport.Height ) + _cfg.DebugConsolePos;
+            Color consoleCol = Color.White;
+            for( int i = 0; i < 5; i++ )
+            {
+                if( _logStrings.Count == i )
+                    break;
+
+                consoleCol.A = (byte)(255 - (byte)(255f/6*i));
+                _spriteBatch.DrawString( _monoFont, _logStrings[i], consolePos, consoleCol );
+                consolePos.Y += -20f;
+            }
             _spriteBatch.End();
         }
     }
